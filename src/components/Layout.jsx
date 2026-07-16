@@ -1,34 +1,41 @@
 import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { FaCalendarAlt, FaChartPie, FaCog, FaFileAlt, FaMoon, FaSignOutAlt, FaSun, FaUsers } from 'react-icons/fa';
+import {
+  BarChart3,
+  BellRing,
+  Building2,
+  CalendarDays,
+  CircleUserRound,
+  LogOut,
+  Plane,
+  Search,
+  Settings,
+  Sparkles,
+  SunMedium,
+  UsersRound,
+} from 'lucide-react';
 import { useAuth } from '../lib/auth';
 import { fetchAllData } from '../lib/firestoreService';
 
 const links = [
-  { to: '/', label: 'Dashboard', icon: FaChartPie },
-  { to: '/employees', label: 'Employees', icon: FaUsers },
-  { to: '/attendance', label: 'Attendance', icon: FaCalendarAlt },
-  { to: '/leaves', label: 'Leave', icon: FaFileAlt },
-  { to: '/reports', label: 'Reports', icon: FaFileAlt },
-  { to: '/settings', label: 'Settings', icon: FaCog },
+  { to: '/', label: 'Dashboard', icon: BarChart3 },
+  { to: '/employees', label: 'Employees', icon: UsersRound },
+  { to: '/attendance', label: 'Attendance', icon: CalendarDays },
+  { to: '/leaves', label: 'Leaves', icon: Plane },
+  { to: '/reports', label: 'Reports', icon: BarChart3 },
+  { to: '/settings', label: 'Settings', icon: Settings },
 ];
 
 const Layout = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [theme, setTheme] = useState(() => localStorage.getItem('doctus-theme') || 'dark');
-  const [companyProfile, setCompanyProfile] = useState({ companyName: 'Doctus Attendance Pro', companyLogo: '' });
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('doctus-theme', theme);
-  }, [theme]);
+  const [companyProfile, setCompanyProfile] = useState({ companyName: 'Doctus Business Solutions', companyLogo: '' });
 
   useEffect(() => {
     const loadProfile = async () => {
       try {
         const result = await fetchAllData();
-        setCompanyProfile(result.settings || { companyName: 'Doctus Attendance Pro', companyLogo: '' });
+        setCompanyProfile(result.settings || { companyName: 'Doctus Business Solutions', companyLogo: '' });
       } catch (error) {
         console.error(error);
       }
@@ -42,54 +49,74 @@ const Layout = () => {
     navigate('/login');
   };
 
-  const shellClasses = theme === 'light'
-    ? 'bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.15),_transparent_20%),linear-gradient(135deg,_#f8fafc,_#e2e8f0)] text-slate-900'
-    : 'bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.25),_transparent_30%),linear-gradient(135deg,_#020617,_#111827)] text-slate-100';
-
   return (
-    <div className={`min-h-screen p-3 sm:p-6 ${shellClasses}`}>
-      <div className={`mx-auto flex min-h-[calc(100vh-1.5rem)] max-w-7xl flex-col overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl shadow-cyan-950/40 backdrop-blur-2xl lg:flex-row ${theme === 'light' ? 'bg-white/80' : 'bg-slate-950/70'}`}>
-        <aside className={`w-full border-b p-5 lg:w-72 lg:border-b-0 lg:border-r ${theme === 'light' ? 'border-slate-200 bg-white/70' : 'border-white/10 bg-slate-900/70'}`}>
-          <div className="mb-8">
-            <p className="text-sm uppercase tracking-[0.35em] text-cyan-500">Doctus</p>
-            <h1 className="mt-2 text-2xl font-semibold">{companyProfile.companyName || 'Attendance Pro'}</h1>
-            <p className={`mt-2 text-sm ${theme === 'light' ? 'text-slate-600' : 'text-slate-400'}`}>HRMS workspace for modern teams</p>
+    <div className="min-h-screen bg-[linear-gradient(135deg,_#fff9e6_0%,_#fffef8_55%,_#fff3d6_100%)] p-3 sm:p-5 lg:p-6">
+      <div className="mx-auto flex min-h-[calc(100vh-1.5rem)] max-w-7xl flex-col overflow-hidden rounded-[32px] border border-[#FFD400]/35 bg-white/80 shadow-[0_35px_120px_-35px_rgba(230,0,35,0.25)] backdrop-blur-xl lg:flex-row">
+        <aside className="w-full border-b border-[#E60023]/10 bg-[linear-gradient(180deg,_#FFD400_0%,_#FFC800_35%,_#FFF7CC_100%)] p-5 lg:w-72 lg:border-b-0 lg:border-r">
+          <div className="mb-7 rounded-[24px] border border-white/50 bg-white/70 p-4 shadow-[0_12px_35px_-18px_rgba(0,0,0,0.35)] backdrop-blur">
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,_#E60023,_#FF7A00_55%,_#FFD400)] shadow-lg shadow-[#E60023]/20">
+                <Building2 className="text-white" size={22} />
+              </div>
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-[#E60023]">Doctus</p>
+                <h1 className="text-lg font-black text-slate-900">{companyProfile.companyName || 'Business Solutions'}</h1>
+              </div>
+            </div>
+            <p className="mt-3 text-sm text-slate-700">Premium HRMS workspace for modern teams</p>
           </div>
+
           <nav className="space-y-2">
             {links.map(({ to, label, icon: Icon }) => (
               <NavLink
                 key={to}
                 to={to}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition ${isActive ? 'bg-cyan-500/20 text-cyan-600 shadow-lg shadow-cyan-950/10' : theme === 'light' ? 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' : 'text-slate-300 hover:bg-white/10 hover:text-white'}`
+                  `flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold transition duration-200 ${isActive ? 'bg-[linear-gradient(135deg,_#E60023,_#FF7A00_60%,_#FFD400)] text-white shadow-lg shadow-[#E60023]/20' : 'text-slate-800 hover:bg-white/60 hover:text-[#E60023]'}`
                 }
               >
-                <Icon className="text-base" />
+                <Icon size={18} />
                 {label}
               </NavLink>
             ))}
           </nav>
-          <div className={`mt-10 rounded-2xl border p-4 ${theme === 'light' ? 'border-cyan-200 bg-cyan-50' : 'border-cyan-400/20 bg-cyan-500/10'}`}>
-            <p className={`text-sm ${theme === 'light' ? 'text-cyan-700' : 'text-cyan-200'}`}>Signed in as</p>
-            <p className="mt-1 font-semibold">{user?.displayName || user?.email || 'HR Admin'}</p>
-            <button onClick={handleLogout} className={`mt-4 flex items-center gap-2 rounded-xl border px-3 py-2 text-sm transition ${theme === 'light' ? 'border-slate-300 bg-white text-slate-800 hover:bg-slate-100' : 'border-white/10 bg-white/10 text-slate-100 hover:bg-white/20'}`}>
-              <FaSignOutAlt /> Logout
+
+          <div className="mt-8 rounded-[24px] border border-white/70 bg-white/70 p-4 shadow-[0_16px_45px_-22px_rgba(0,0,0,0.3)] backdrop-blur">
+            <div className="flex items-center gap-3">
+              <div className="rounded-2xl bg-[#FFF3D6] p-2 text-[#E60023]">
+                <CircleUserRound size={20} />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-slate-900">{user?.displayName || user?.email || 'HR Admin'}</p>
+                <p className="text-xs text-slate-600">Operations Lead</p>
+              </div>
+            </div>
+            <button onClick={handleLogout} className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl border border-[#E60023]/20 bg-[#FFF3D6] px-3 py-2 text-sm font-semibold text-[#E60023] transition hover:-translate-y-0.5">
+              <LogOut size={16} />
+              Logout
             </button>
           </div>
         </aside>
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">
-          <header className={`mb-6 flex flex-col gap-3 rounded-[1.5rem] border p-4 backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between ${theme === 'light' ? 'border-slate-200 bg-white/70' : 'border-white/10 bg-white/10'}`}>
+
+        <main className="flex-1 bg-[linear-gradient(135deg,_rgba(255,255,255,0.97),_rgba(255,249,230,0.97))] p-4 sm:p-6 lg:p-7">
+          <header className="mb-6 rounded-[24px] border border-[#FFD400]/35 bg-white/80 p-4 shadow-[0_16px_45px_-22px_rgba(0,0,0,0.22)] backdrop-blur-xl sm:flex sm:items-center sm:justify-between">
             <div>
-              <p className="text-sm uppercase tracking-[0.3em] text-cyan-500">Operations Center</p>
-              <h2 className={`text-xl font-semibold ${theme === 'light' ? 'text-slate-900' : 'text-white'}`}>Welcome back to your attendance command center</h2>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-[#E60023]">Operations Center</p>
+              <h2 className="mt-1 text-xl font-black text-slate-900">Welcome back to your attendance command center</h2>
             </div>
-            <div className="flex items-center gap-3">
-              <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} className={`flex items-center gap-2 rounded-2xl border px-3 py-2 text-sm ${theme === 'light' ? 'border-slate-300 bg-slate-100 text-slate-800' : 'border-white/10 bg-white/10 text-slate-100'}`}>
-                {theme === 'light' ? <FaMoon /> : <FaSun />} {theme === 'light' ? 'Dark mode' : 'Light mode'}
+            <div className="mt-3 flex flex-wrap items-center gap-3 sm:mt-0">
+              <label className="flex items-center gap-2 rounded-2xl border border-[#FFD400]/30 bg-[#FFF9E6] px-3 py-2 text-sm text-slate-600 shadow-sm">
+                <Search size={16} className="text-[#FF7A00]" />
+                <input className="w-28 bg-transparent outline-none sm:w-40" placeholder="Search" />
+              </label>
+              <button className="flex items-center gap-2 rounded-2xl border border-[#FFD400]/30 bg-[#FFF9E6] px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm">
+                <BellRing size={16} className="text-[#E60023]" />
+                Alerts
               </button>
-              <div className={`rounded-2xl border px-4 py-2 text-sm ${theme === 'light' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-emerald-400/20 bg-emerald-500/10 text-emerald-200'}`}>
-                99.2% workforce readiness
-              </div>
+              <button className="flex items-center gap-2 rounded-2xl border border-[#FFD400]/30 bg-[#FFF9E6] px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm">
+                <SunMedium size={16} className="text-[#FF7A00]" />
+                Bright Mode
+              </button>
             </div>
           </header>
           <Outlet />
